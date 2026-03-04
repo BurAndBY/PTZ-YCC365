@@ -59,7 +59,7 @@ def _move_xml(profile, x, y):
 </soap:Envelope>"""
 
 
-def _register_services(hass):
+def _get_service_handlers():
     def stop(call):
         host = call.data.get(ATTR_HOST, DEFAULT_HOST)
         profile = call.data.get(ATTR_PROFILE, DEFAULT_PROFILE)
@@ -134,23 +134,41 @@ def _register_services(hass):
         time.sleep(pan_time)
         move_origin_tilt(call)
 
-    hass.services.register(DOMAIN, "move_left", move_left)
-    hass.services.register(DOMAIN, "move_right", move_right)
-    hass.services.register(DOMAIN, "move_up", move_up)
-    hass.services.register(DOMAIN, "move_down", move_down)
-    hass.services.register(DOMAIN, "stop", stop)
-    hass.services.register(DOMAIN, "move_origin", move_origin)
-    hass.services.register(DOMAIN, "move_origin_pan", move_origin_pan)
-    hass.services.register(DOMAIN, "move_origin_tilt", move_origin_tilt)
+    return {
+        "move_left": move_left,
+        "move_right": move_right,
+        "move_up": move_up,
+        "move_down": move_down,
+        "stop": stop,
+        "move_origin": move_origin,
+        "move_origin_pan": move_origin_pan,
+        "move_origin_tilt": move_origin_tilt,
+    }
+
+
+def _register_services_sync(hass):
+    handlers = _get_service_handlers()
+    for service_name, handler in handlers.items():
+        hass.services.register(DOMAIN, service_name, handler)
+
+
+async def _register_services_async(hass):
+    handlers = _get_service_handlers()
+    for service_name, handler in handlers.items():
+
+        async def async_wrapper(call, _handler=handler):
+            await hass.async_add_executor_job(_handler, call)
+
+        hass.services.async_register(DOMAIN, service_name, async_wrapper)
 
 
 def setup(hass, config):
     LOGGER.info("Setting up PTZ Camera integration")
-    _register_services(hass)
+    _register_services_sync(hass)
     return True
 
 
 async def async_setup(hass, config):
     LOGGER.info("Setting up PTZ Camera integration (async)")
-    _register_services(hass)
+    await _register_services_async(hass)
     return True
