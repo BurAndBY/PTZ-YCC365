@@ -1,0 +1,8 @@
+{
+  "name": "PTZ Camera",
+  "content_in_root": false,
+  "domains": [
+    "ptz_camera"
+  ],
+  "render_readme": true
+}

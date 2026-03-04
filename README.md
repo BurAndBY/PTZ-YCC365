@@ -33,7 +33,18 @@ Para poder utlizar este compoente personalizado, recomiendo que integres la señ
       - rtsp://IP:554/0/av1	640x352 h264	audio mono 8000Hz 16 bits
 
 ## Instalación
-Solo necesita instalar el componente personalizado de forma habitual. Copia la carpeta otz_camera de este proyecto en su directorio /config/custom_components/ de su Home Assistant.
+
+### Con HACS (recomendado)
+
+1. En Home Assistant, ve a **HACS** > **Integrations**.
+2. Pulsa en los tres puntos (arriba a la derecha) y selecciona **Custom repositories**.
+3. Añade este repositorio y selecciona el tipo **Integration**.
+4. Busca **PTZ Camera** en HACS e instálalo.
+5. Reinicia Home Assistant.
+
+### Manual
+
+Copia la carpeta `ptz_camera` de este proyecto en su directorio `/config/custom_components/` de Home Assistant.
 
 ## Configuración
 En su configuration.yaml:
