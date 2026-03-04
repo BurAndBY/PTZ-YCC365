@@ -70,7 +70,7 @@ move_down:
       description: "Duration time of camera movement. Optional."
       example: 0.3
       
-move_stop:
+stop:
   # Description of the service
   description: "Stop camera movement."
   # Different fields that your service accepts
